@@ -4,7 +4,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 
 from custom_profile.forms import SignUpForm
-from custom_profile.model import Profile
+from custom_profile.models import Profile
 from custom_profile.serializers import ProfileSerializer
 
 
@@ -27,7 +27,7 @@ class ProfileAPIView(APIView):
         ---
         # Content
             - name: CharField(max_length=10, null=True): name field
-            - accessible_beacon_id: Textfield(blank=True, Null=False, default="[]"): json string field
+            - accessible_beacon_id: TextField(blank=True, Null=False, default="[]"): json string field
     """
     permission_classes = (permissions.IsAuthenticated, )
 

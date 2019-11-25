@@ -17,6 +17,6 @@ from django.urls import path
 import custom_profile.views as views
 
 urlpatterns = [
-    path('register/', views.register, name = 'register')
-    path('', views.ProfileAPIView.as_view(), name = 'profileOverall')
+    path('register/', views.register, name='register'),
+    path('', views.ProfileAPIView.as_view(), name='profileOverall')
 ]
