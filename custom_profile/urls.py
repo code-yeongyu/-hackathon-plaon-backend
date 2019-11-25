@@ -18,5 +18,6 @@ import custom_profile.views as views
 
 urlpatterns = [
     path('register/', views.register, name='register'),
+    path('login/', views.GetAuthToken.as_view(), name='auth'),
     path('', views.ProfileAPIView.as_view(), name='profileOverall')
 ]

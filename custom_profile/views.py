@@ -4,6 +4,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from rest_framework.authtoken import views as drf_views
 
 from drf_yasg.utils import swagger_auto_schema
 import drf_yasg.openapi as openapi
@@ -65,3 +66,27 @@ class ProfileAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors,
                         status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+class GetAuthToken(drf_views.ObtainAuthToken):
+    @swagger_auto_schema(operation_description="Get token of requested user",
+                         responses={
+                             200: 'Successfully updated the requested value.',
+                         },
+                         manual_parameters=[
+                             openapi.Parameter('username',
+                                               openapi.IN_QUERY,
+                                               description="username",
+                                               type=openapi.TYPE_STRING),
+                             openapi.Parameter('password',
+                                               openapi.IN_QUERY,
+                                               description="password",
+                                               type=openapi.FORMAT_PASSWORD),
+                         ])
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
