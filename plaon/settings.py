@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'drf_yasg',
+    # user
+    'custom_profile'
 ]
 
 REST_FRAMEWORK = {
