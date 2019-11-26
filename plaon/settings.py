@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     # user
-    'custom_profile'
+    'custom_profile',
+    'doorlock'
 ]
 
 REST_FRAMEWORK = {
