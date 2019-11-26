@@ -1,19 +1,38 @@
+import json
+
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
+from drf_yasg.utils import swagger_auto_schema
+
 from doorlock.models import Doorlock
 from doorlock.forms import DoorlockCreationForm
 from doorlock.serializers import DoorlockSerializer
+from django.contrib.auth.models import User
 
 
 class DoorlockOverall(APIView):
+    @swagger_auto_schema(
+        operation_description="Get doorlocks with permissions",
+        responses={
+            200: 'Returned request value successfully',
+            401: 'Unauthorized'
+        },
+        manual_parameters=DoorlockSerializer.Meta.parameters)
     def get(self, request):
         if request.user.is_authenticated:
             doorlocks = Doorlock.objects.filter(owner=request.user).values()
             return Response(doorlocks, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+    @swagger_auto_schema(operation_description="Register a new doorlock",
+                         responses={
+                             201: 'Registered a new doorlock successfully',
+                             401: 'Unauthorized',
+                             406: 'Errors occured with given datas',
+                         },
+                         manual_parameters=DoorlockSerializer.Meta.parameters)
     def post(self, request):
         if request.user.is_authenticated:
             serializer = DoorlockSerializer(data=request.data)
