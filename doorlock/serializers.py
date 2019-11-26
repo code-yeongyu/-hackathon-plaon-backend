@@ -7,8 +7,8 @@ from doorlock.models import Doorlock
 
 class DoorlockSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    beacon_id = serializers.ReadOnlyField(source='beacon_id')
-    push_id = serializers.ReadOnlyField(source='push_id')
+    beacon_id = serializers.ReadOnlyField()
+    push_id = serializers.ReadOnlyField()
 
     class Meta:
         model = Doorlock

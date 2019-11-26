@@ -10,5 +10,5 @@ class Doorlock(models.Model):
     )
     beacon_id = models.IntegerField(null=False, default=-1)
     push_id = models.IntegerField(null=False, default=-1)
-    location_text = models.Textfield(null=False, default="")
+    location_text = models.TextField(null=False, default="")
     nickname = models.CharField(max_length=20, null=False, default="")

@@ -35,7 +35,7 @@ class DoorlockOverall(APIView):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-class ArticleDetail(generics.RetrieveUpdateAPIView):
+class DoorlockDetail(generics.RetrieveUpdateAPIView):
     queryset = Doorlock.objects.all()
     serializer_class = DoorlockSerializer
     permission_classes = (permissions.IsAuthenticated, )
