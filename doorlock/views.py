@@ -39,3 +39,42 @@ class DoorlockDetail(generics.RetrieveUpdateAPIView):
     queryset = Doorlock.objects.all()
     serializer_class = DoorlockSerializer
     permission_classes = (permissions.IsAuthenticated, )
+
+
+@swagger_auto_schema(method='post',
+                     operation_description="Send open push to a doorlock",
+                     responses={
+                         200: 'Successfully did requested work',
+                     })
+@api_view(['POST'])
+def send_open_push(request, beacon_id):
+    # 계정의 accessible_beacon_id에 있을 경우
+    # 해당 beacon_id와 같은 도어록을 갖고와서
+    # 해당 도어록의 push_id를 갖고 push
+    pass
+
+
+@swagger_auto_schema(
+    method='post',
+    operation_description="Give permissions about doorlock to given user",
+    responses={
+        200: 'Successfully did requested work',
+        400: 'Unauthorized',
+        406: 'username not given to the post body data',
+    },
+    manual_parameters=DoorlockSerializer.Meta.parameters)
+@api_view(['POST'])
+def invite(request, beacon_id):
+    doorlock = Doorlock.objects.filter(beacon_id=beacon_id)
+    if (request.data.get('username') == None):
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+    if (doorlock.owner == request.user):
+        invited_user = User.objects.filter(
+            username=request.data.get('username'))
+        profile = Profile.objects.filter(user=invited_user)
+        accessible_beacons_id = json.load(profile.accessible_beacon_id)
+        accessible_beacons_id.append(beacon_id)
+        profile.accessible_beacon_id = json.dumps(accessible_beacons_id)
+        profile.save()
+        return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
